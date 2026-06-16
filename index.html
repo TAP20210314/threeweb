@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Seasoning Personality Test | 调料人格测试</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+    body {
+      background: #f8f5f0;
+      font-size: 16px;
+      color: #333;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+    .container {
+      width: 100%;
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 20px 15px;
+    }
+    .title {
+      text-align: center;
+      font-size: 22px;
+      color: #d84315;
+      margin: 20px 0 30px;
+      font-weight: bold;
+    }
+    .sub-en {
+      font-size: 14px;
+      color: #999;
+      margin-top: 6px;
+      font-weight: normal;
+    }
+    .question-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .q-title {
+      font-size: 17px;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    .q-en {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 12px;
+    }
+    .option-item {
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      text-align: left;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      line-height: 1.4;
+    }
+    .option-en {
+      font-size: 13px;
+      color: #888;
+      margin-top: 4px;
+    }
+    .option-item.active {
+      border-color: #d84315;
+      background: #fff3ee;
+      color: #d84315;
+    }
+    .btn-next, .btn-generate {
+      display: block;
+      width: 100%;
+      height: 48px;
+      line-height: 48px;
+      text-align: center;
+      background: #d84315;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 17px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    .btn-generate {
+      background: #f57c00;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .poster-wrap {
+      text-align: center;
+      margin-top: 20px;
+    }
+    #posterCanvas {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    }
+    .tip-text {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page active" id="page1">
+      <h2 class="title">
+        你的火锅调料人格测试
+        <div class="sub-en">Hot Pot Seasoning Personality Test</div>
+      </h2>
+
+      <div class="question-box" id="q1">
+        <p class="q-title">问题1：你碗里最多的是什么类型的调料？</p>
+        <p class="q-en">Q1: What seasoning do you have the most in your bowl?</p>
+        <button class="option-item" data-type="土">
+          花生芝麻酱/芝麻油/豆腐乳
+          <div class="option-en">Sesame paste / Sesame oil / Fermented bean curd</div>
+        </button>
+        <button class="option-item" data-type="火">
+          辣椒粉/辣椒酱/泰国椒
+          <div class="option-en">Chili powder / Chili sauce / Thai chili</div>
+        </button>
+        <button class="option-item" data-type="木">
+          香醋+香菜/蒜泥/鲜蔬
+          <div class="option-en">Vinegar & Coriander / Garlic / Fresh greens</div>
+        </button>
+        <button class="option-item" data-type="金">
+          蚝油/菌王酱/炸葱/胡椒粉
+          <div class="option-en">Oyster sauce / Mushroom sauce / Fried shallot / Pepper</div>
+        </button>
+        <button class="option-item" data-type="水">
+          豆豉/酱油/牛肉末
+          <div class="option-en">Fermented beans / Soy sauce / Minced beef</div>
+        </button>
+      </div>
+
+      <div class="question-box" id="q2" style="display: none;">
+        <p class="q-title">问题2：你吃火锅的灵魂是什么？</p>
+        <p class="q-en">Q2: What is the soul of your hot pot?</p>
+        <button class="option-item" data-type="土">
+          浓郁醇厚的麻香
+          <div class="option-en">Rich and mellow sesame flavor</div>
+        </button>
+        <button class="option-item" data-type="火">
+          一口上头的辣度
+          <div class="option-en">Spicy and stimulating taste</div>
+        </button>
+        <button class="option-item" data-type="木">
+          清爽解腻的鲜酸
+          <div class="option-en">Refreshing sour & fresh flavor</div>
+        </button>
+        <button class="option-item" data-type="金">
+          层次丰富的鲜味
+          <div class="option-en">Multi-layered umami taste</div>
+        </button>
+        <button class="option-item" data-type="水">
+          咸香入味的本味
+          <div class="option-en">Savory and original flavor</div>
+        </button>
+      </div>
+
+      <div class="question-box" id="q3" style="display: none;">
+        <p class="q-title">问题3：你更偏爱哪种食材搭配？</p>
+        <p class="q-en">Q3: Which ingredients do you prefer?</p>
+        <button class="option-item" data-type="土">
+          肥牛/羊肉卷，裹满酱料
+          <div class="option-en">Beef / Lamb rolls with thick sauce</div>
+        </button>
+        <button class="option-item" data-type="火">
+          毛肚/鸭肠，蘸满辣油
+          <div class="option-en">Tripe / Duck intestines with chili oil</div>
+        </button>
+        <button class="option-item" data-type="木">
+          蔬菜/菌菇，主打清爽
+          <div class="option-en">Vegetables & mushrooms, light taste</div>
+        </button>
+        <button class="option-item" data-type="金">
+          海鲜/丸子，追求本味鲜
+          <div class="option-en">Seafood & meat balls, fresh original taste</div>
+        </button>
+        <button class="option-item" data-type="水">
+          牛肉/内脏，越煮越香
+          <div class="option-en">Beef & offal, tasty after long boiling</div>
+        </button>
+      </div>
+
+      <button class="btn-next" id="nextBtn">下一题 Next</button>
+    </div>
+
+    <div class="page" id="page2">
+      <h2 class="title">
+        你的火锅调料人格已生成！
+        <div class="sub-en">Your personality result is ready!</div>
+      </h2>
+      <div class="poster-wrap">
+        <canvas id="posterCanvas" width="600" height="900"></canvas>
+        <p class="tip-text">长按图片即可保存分享 · Long press to save & share</p>
+        <button class="btn-generate" onclick="window.location.reload();">再测一次 Test Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const personalityMap = {
+      土: {
+        name: "醇厚派 Mellow Type",
+        tag: "你骨子里是个北方胃 | Born for rich flavor",
+        color: "#8B4513",
+        bgColor: "#fff3ee",
+        desc: "偏爱浓郁酱香，温润踏实，享受食物本真香气\nLove rich sauce, steady and down-to-earth."
+      },
+      火: {
+        name: "烈焰派 Spicy Type",
+        tag: "无辣不欢的灵魂 | Spicy food lover",
+        color: "#d84315",
+        bgColor: "#ffe8e0",
+        desc: "热情张扬，嗜辣成瘾，生活就要热辣滚烫\nPassionate and bold, live a hot & exciting life."
+      },
+      木: {
+        name: "清新派 Fresh Type",
+        tag: "清汤挂面的极简主义者 | Minimalist taste",
+        color: "#2E7D32",
+        bgColor: "#e8f5e9",
+        desc: "清爽雅致，偏爱鲜酸口感，简约又自在\nElegant and fresh, enjoy simple & relaxed lifestyle."
+      },
+      金: {
+        name: "鲜香派 Umami Type",
+        tag: "追求鲜味的老饕 | Professional foodie",
+        color: "#FF8F00",
+        bgColor: "#fff8e1",
+        desc: "懂吃会品，注重层次，不放过每一口鲜美\nGood at tasting, chase every delicate umami."
+      },
+      水: {
+        name: "融合派 Mixed Type",
+        tag: "南洋华人DNA觉醒 | Mixed flavor lover",
+        color: "#1976D2",
+        bgColor: "#e3f2fd",
+        desc: "包容多元，口味兼容，擅长融合各式风味\nOpen-minded, good at blending different flavors."
+      }
+    };
+
+    let currentQ = 1;
+    let answers = [];
+    const q1 = document.getElementById('q1');
+    const q2 = document.getElementById('q2');
+    const q3 = document.getElementById('q3');
+    const nextBtn = document.getElementById('nextBtn');
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+    const canvas = document.getElementById('posterCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const globalLogo = new Image();
+    globalLogo.crossOrigin = "anonymous";
+    globalLogo.src = "logo.png";
+
+    document.querySelectorAll('.option-item').forEach(item => {
+      item.addEventListener('click', function () {
+        const parent = this.parentElement;
+        parent.querySelectorAll('.option-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+        answers[currentQ - 1] = this.dataset.type;
+      });
+    });
+
+    nextBtn.addEventListener('click', function () {
+      if (!answers[currentQ - 1]) {
+        alert('请先选择一个选项 | Please choose an option');
+        return;
+      }
+      if (currentQ === 1) {
+        q1.style.display = 'none';
+        q2.style.display = 'block';
+        currentQ = 2;
+      } else if (currentQ === 2) {
+        q2.style.display = 'none';
+        q3.style.display = 'block';
+        currentQ = 3;
+        this.innerText = '生成我的人格海报 Generate Poster';
+      } else if (currentQ === 3) {
+        const counts = {};
+        answers.forEach(t => counts[t] = (counts[t] || 0) + 1);
+        let finalType = Object.keys(counts)[0];
+        let maxNum = counts[finalType];
+        for (let k in counts) {
+          if (counts[k] > maxNum) {
+            maxNum = counts[k];
+            finalType = k;
+          }
+        }
+        page1.classList.remove('active');
+        page2.classList.add('active');
+        drawPoster(finalType);
+      }
+    });
+
+    function drawPoster(type) {
+      const p = personalityMap[type];
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = p.bgColor;
+      ctx.fillRect(0, 0, w, h);
+
+      // ========== Logo 配置（居中置顶，三档尺寸任选） ==========
+      // 小尺寸：100px（推荐简约Logo）
+      // const logoSize = 100;
+      // 中等尺寸：120px（当前默认，通用百搭）
+      const logoSize = 120;
+      // 大尺寸：140px（Logo图案简单、想突出品牌）
+      // const logoSize = 140;
+
+      if (globalLogo.complete && globalLogo.naturalWidth > 0) {
+        const logoX = (w - logoSize) / 2;
+        const logoY = 25; // Logo 顶部边距
+        ctx.drawImage(globalLogo, logoX, logoY, logoSize, logoSize);
+      }
+
+      // 主标题
+      ctx.fillStyle = p.color;
+      ctx.font = 'bold 38px Microsoft Yahei';
+      ctx.textAlign = 'center';
+      ctx.fillText('火锅调料人格测试', w / 2, 190);
+      ctx.font = '19px Microsoft Yahei';
+      ctx.fillStyle = '#888';
+      ctx.fillText('Hot Pot Seasoning Test', w / 2, 225);
+
+      // 分割线
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(100, 250);
+      ctx.lineTo(500, 250);
+      ctx.stroke();
+
+      // 五行流派文字
+      ctx.fillStyle = '#222';
+      ctx.font = 'bold 44px Microsoft Yahei';
+      ctx.fillText(`${type}行 · ${p.name}`, w / 2, 370);
+
+      // 标签文字
+      ctx.fillStyle = p.color;
+      ctx.font = 'bold 28px Microsoft Yahei';
+      ctx.fillText(p.tag, w / 2, 490);
+
+      // 描述文字
+      ctx.fillStyle = '#555';
+      ctx.font = '22px Microsoft Yahei';
+      const descArr = p.desc.split('\n');
+      ctx.fillText(descArr[0], w / 2, 580);
+      ctx.fillText(descArr[1], w / 2, 615);
+
+      // 底部文案
+      ctx.fillStyle = '#777';
+      ctx.font = '24px Microsoft Yahei';
+      ctx.fillText('趣味测评 · 欢乐分享', w / 2, 740);
+      ctx.fillStyle = '#999';
+      ctx.font = '19px Microsoft Yahei';
+      ctx.fillText('Fun Test & Happy Share', w / 2, 775);
+      ctx.fillText('扫码测测你的专属口味人格', w / 2, 810);
+      ctx.fillText('Scan to get your taste personality', w / 2, 845);
+    }
+  </script>
+</body>
+</html>
