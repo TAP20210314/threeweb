@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>火锅调料人格测试 | Hot Pot Seasoning Personality Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+    body {
+      background: #f8f5f0;
+      font-size: 16px;
+      color: #333;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+    .container {
+      width: 100%;
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 20px 15px;
+    }
+    .title {
+      text-align: center;
+      font-size: 22px;
+      color: #d84315;
+      margin: 20px 0 30px;
+      font-weight: bold;
+    }
+    .sub-en {
+      font-size: 14px;
+      color: #999;
+      margin-top: 6px;
+      font-weight: normal;
+    }
+    .question-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .q-title {
+      font-size: 17px;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    .q-en {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 12px;
+    }
+    .option-item {
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      text-align: left;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      line-height: 1.4;
+    }
+    .option-en {
+      font-size: 13px;
+      color: #888;
+      margin-top: 4px;
+    }
+    .option-item.active {
+      border-color: #d84315;
+      background: #fff3ee;
+      color: #d84315;
+    }
+    .btn-next, .btn-generate {
+      display: block;
+      width: 100%;
+      height: 48px;
+      line-height: 48px;
+      text-align: center;
+      background: #d84315;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 17px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    .btn-generate {
+      background: #f57c00;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .poster-wrap {
+      text-align: center;
+      margin-top: 20px;
+    }
+    #posterCanvas {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    }
+    .tip-text {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 答题页面 -->
+    <div class="page active" id="page1">
+      <h2 class="title">
+        你的火锅调料人格测试
+        <div class="sub-en">Hot Pot Seasoning Personality Test</div>
+      </h2>
+
+      <!-- 第1题 权重3分 -->
+      <div class="question-box" id="q1">
+        <p class="q-title">问题1：你调蘸料时，放得最多的基底酱料是？</p>
+        <p class="q-en">Q1: What base seasoning do you put the most in your dip?</p>
+
+        <button class="option-item" data-type="木" data-weight="3">
+          醋 / 柠檬汁等酸香草本类
+          <div class="option-en">Vinegar / Lemon juice & other sour herbal flavors</div>
+        </button>
+        <button class="option-item" data-type="火" data-weight="3">
+          各类辣椒 / 辣椒酱等辛辣刺激类
+          <div class="option-en">Chili / Chili sauce & other spicy flavors</div>
+        </button>
+        <button class="option-item" data-type="土" data-weight="3">
+          麻酱 / 花生碎 / 腐乳等甘甜醇厚类
+          <div class="option-en">Sesame paste / Peanut / Fermented bean curd & other sweet mellow flavors</div>
+        </button>
+        <button class="option-item" data-type="金" data-weight="3">
+          蚝油 / 菌酱 / 胡椒粉等鲜辛提味类
+          <div class="option-en">Oyster sauce / Mushroom sauce / Pepper & other umami flavors</div>
+        </button>
+        <button class="option-item" data-type="水" data-weight="3">
+          酱油 / 牛肉末 / 豆豉等咸鲜基底类
+          <div class="option-en">Soy sauce / Minced beef / Fermented beans & other salty fresh flavors</div>
+        </button>
+      </div>
+
+      <!-- 第2题 权重2分 -->
+      <div class="question-box" id="q2" style="display: none;">
+        <p class="q-title">问题2：你吃火锅蘸料更偏爱哪种口感？</p>
+        <p class="q-en">Q2: What texture of hot pot dip do you prefer?</p>
+
+        <button class="option-item" data-type="木" data-weight="2">
+          清爽解腻，吃完不糊嘴
+          <div class="option-en">Refreshing, non-greasy, no sticky feeling after eating</div>
+        </button>
+        <button class="option-item" data-type="火" data-weight="2">
+          劲爽爆辣，越吃越上头
+          <div class="option-en">Spicy and exciting, the more you eat, the more addictive</div>
+        </button>
+        <button class="option-item" data-type="土" data-weight="2">
+          绵密香浓，温和不刺激
+          <div class="option-en">Thick and rich, mild and non-irritating</div>
+        </button>
+        <button class="option-item" data-type="金" data-weight="2">
+          鲜味突出，搭配清汤绝佳
+          <div class="option-en">Outstanding umami, perfect with clear soup</div>
+        </button>
+        <button class="option-item" data-type="水" data-weight="2">
+          咸香打底，平衡所有味道
+          <div class="option-en">Salty base, balances all flavors</div>
+        </button>
+      </div>
+
+      <!-- 第3题 权重1分 -->
+      <div class="question-box" id="q3" style="display: none;">
+        <p class="q-title">问题3：你的吃蘸料习惯更贴近？</p>
+        <p class="q-en">Q3: Which of the following dip habits is closer to yours?</p>
+
+        <button class="option-item" data-type="木" data-weight="1">
+          必加香菜、蒜泥、香葱等鲜蔬
+          <div class="option-en">Must add coriander, garlic, chives and other fresh vegetables</div>
+        </button>
+        <button class="option-item" data-type="火" data-weight="1">
+          无辣不欢，多种辣椒混合
+          <div class="option-en">No joy without spicy, mix multiple chili peppers</div>
+        </button>
+        <button class="option-item" data-type="土" data-weight="1">
+          麻酱是灵魂，花生芝麻少不了
+          <div class="option-en">Sesame paste is the soul, peanuts and sesame are essential</div>
+        </button>
+        <button class="option-item" data-type="金" data-weight="1">
+          喜欢鲜味儿，一定要加蚝油提鲜
+          <div class="option-en">Love umami, must add oyster sauce to enhance freshness</div>
+        </button>
+        <button class="option-item" data-type="水" data-weight="1">
+          重咸口，靠酱油、肉末增加底味
+          <div class="option-en">Heavy salty taste, add base flavor with soy sauce and minced meat</div>
+        </button>
+      </div>
+
+      <button class="btn-next" id="nextBtn">下一题 Next</button>
+    </div>
+
+    <!-- 结果海报页 -->
+    <div class="page" id="page2">
+      <h2 class="title">
+        你的火锅调料人格已生成！
+        <div class="sub-en">Your personality result is ready!</div>
+      </h2>
+      <div class="poster-wrap">
+        <canvas id="posterCanvas" width="600" height="900"></canvas>
+        <p class="tip-text">长按图片即可保存分享 · Long press to save & share</p>
+        <button class="btn-generate" onclick="window.location.reload();">再测一次 Test Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 完全匹配Excel的人格结果配置
+    const personalityMap = {
+      土: {
+        name: "元气捞 Vitality Type",
+        tag: "绵密香浓的治愈系选手 | Mellow & healing",
+        color: "#8B4513",
+        bgColor: "#fff3ee",
+        desc: "偏爱醇厚麻酱香，温和踏实，用浓郁口感治愈味蕾\nLove mellow sesame flavor, gentle and reliable, heal your taste buds."
+      },
+      火: {
+        name: "辣焰捞 Spicy Type",
+        tag: "无辣不欢的火辣灵魂 | Spicy food lover",
+        color: "#d84315",
+        bgColor: "#ffe8e0",
+        desc: "热情张扬，嗜辣成瘾，生活就要热辣滚烫\nPassionate and bold, live a hot & exciting life."
+      },
+      木: {
+        name: "木林捞 Fresh Type",
+        tag: "清爽解腻的清新派 | Refreshing & clean",
+        color: "#2E7D32",
+        bgColor: "#e8f5e9",
+        desc: "偏爱酸香草本，清爽雅致，给味蕾减负的极简主义者\nLove sour herbal flavor, elegant and fresh, minimalist for taste buds."
+      },
+      金: {
+        name: "鲜萃捞 Umami Type",
+        tag: "追求本味的鲜食老饕 | Professional foodie",
+        color: "#FF8F00",
+        bgColor: "#fff8e1",
+        desc: "懂吃会品，注重鲜味层次，不放过每一口本真鲜美\nGood at tasting, chase every delicate umami flavor."
+      },
+      水: {
+        name: "咸香捞 Savory Type",
+        tag: "咸香均衡的百搭选手 | All-rounder",
+        color: "#1976D2",
+        bgColor: "#e3f2fd",
+        desc: "包容多元，咸香打底，平衡所有味道的调味大师\nOpen-minded, salty base, master of balancing all flavors."
+      }
+    };
+
+    // 同分优先级规则（Excel规定：土＞火＞木＞金＞水）
+    const priorityOrder = ["土", "火", "木", "金", "水"];
+
+    let currentQ = 1;
+    let answers = [];
+    const q1 = document.getElementById('q1');
+    const q2 = document.getElementById('q2');
+    const q3 = document.getElementById('q3');
+    const nextBtn = document.getElementById('nextBtn');
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+    const canvas = document.getElementById('posterCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // 初始化Logo（居中置顶）
+    const globalLogo = new Image();
+    globalLogo.crossOrigin = "anonymous";
+    globalLogo.src = "logo.png";
+
+    // 选项选中逻辑
+    document.querySelectorAll('.option-item').forEach(item => {
+      item.addEventListener('click', function () {
+        const parent = this.parentElement;
+        parent.querySelectorAll('.option-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+        // 记录答案：五行类型 + 权重
+        answers[currentQ - 1] = {
+          type: this.dataset.type,
+          weight: parseInt(this.dataset.weight)
+        };
+      });
+    });
+
+    // 切换题目 + 生成结果
+    nextBtn.addEventListener('click', function () {
+      if (!answers[currentQ - 1]) {
+        alert('请先选择一个选项 | Please choose an option');
+        return;
+      }
+
+      if (currentQ === 1) {
+        q1.style.display = 'none';
+        q2.style.display = 'block';
+        currentQ = 2;
+      } else if (currentQ === 2) {
+        q2.style.display = 'none';
+        q3.style.display = 'block';
+        currentQ = 3;
+        this.innerText = '生成我的人格海报 Generate Poster';
+      } else if (currentQ === 3) {
+        // 完全按照Excel规则计算权重分
+        const scores = {
+          土: 0,
+          火: 0,
+          木: 0,
+          金: 0,
+          水: 0
+        };
+        // 累加权重分
+        answers.forEach(answer => {
+          scores[answer.type] += answer.weight;
+        });
+
+        // 找出最高分
+        let maxScore = -1;
+        for (let type in scores) {
+          if (scores[type] > maxScore) {
+            maxScore = scores[type];
+          }
+        }
+
+        // 筛选出所有最高分的五行，按优先级排序，取第一个
+        const topTypes = priorityOrder.filter(type => scores[type] === maxScore);
+        const finalType = topTypes[0];
+
+        // 切换到结果页，绘制海报
+        page1.classList.remove('active');
+        page2.classList.add('active');
+        drawPoster(finalType);
+      }
+    });
+
+    // 绘制海报（Logo居中置顶，字体优化）
+    function drawPoster(type) {
+      const p = personalityMap[type];
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = p.bgColor;
+      ctx.fillRect(0, 0, w, h);
+
+      // 1. 顶部居中Logo
+      if (globalLogo.complete && globalLogo.naturalWidth > 0) {
+        const logoSize = 120;
+        const logoX = (w - logoSize) / 2;
+        const logoY = 25;
+        ctx.drawImage(globalLogo, logoX, logoY, logoSize, logoSize);
+      }
+
+      // 2. 主标题
+      ctx.fillStyle = p.color;
+      ctx.font = 'bold 38px Microsoft Yahei';
+      ctx.textAlign = 'center';
+      ctx.fillText('火锅调料人格测试', w / 2, 190);
+      ctx.font = '19px Microsoft Yahei';
+      ctx.fillStyle = '#888';
+      ctx.fillText('Hot Pot Seasoning Test', w / 2, 225);
+
+      // 3. 分割线
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(100, 250);
+      ctx.lineTo(500, 250);
+      ctx.stroke();
+
+      // 4. 最终结果名称
+      ctx.fillStyle = '#222';
+      ctx.font = 'bold 44px Microsoft Yahei';
+      ctx.fillText(`${type}行 · ${p.name}`, w / 2, 370);
+
+      // 5. 标签文案
+      ctx.fillStyle = p.color;
+      ctx.font = 'bold 28px Microsoft Yahei';
+      ctx.fillText(p.tag, w / 2, 490);
+
+      // 6. 描述文案
+      ctx.fillStyle = '#555';
+      ctx.font = '22px Microsoft Yahei';
+      const descArr = p.desc.split('\n');
+      ctx.fillText(descArr[0], w / 2, 580);
+      ctx.fillText(descArr[1], w / 2, 615);
+
+      // 7. 底部文案
+      ctx.fillStyle = '#777';
+      ctx.font = '24px Microsoft Yahei';
+      ctx.fillText('趣味测评 · 欢乐分享', w / 2, 740);
+      ctx.fillStyle = '#999';
+      ctx.font = '19px Microsoft Yahei';
+      ctx.fillText('Fun Test & Happy Share', w / 2, 775);
+      ctx.fillText('扫码测测你的专属口味人格', w / 2, 810);
+      ctx.fillText('Scan to get your taste personality', w / 2, 845);
+    }
+  </script>
+</body>
+</html>
