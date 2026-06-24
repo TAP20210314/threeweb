@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>海底捞·五行调味局 | Hot Pot Seasoning Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+    body {
+      background: #f8f5f0;
+      font-size: 16px;
+      color: #333;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+    .container {
+      width: 100%;
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 20px 15px;
+    }
+    .title {
+      text-align: center;
+      font-size: 22px;
+      color: #d84315;
+      margin: 20px 0 30px;
+      font-weight: bold;
+    }
+    .sub-en {
+      font-size: 14px;
+      color: #999;
+      margin-top: 6px;
+      font-weight: normal;
+    }
+    .question-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .q-title {
+      font-size: 17px;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    .q-en {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 12px;
+    }
+    .option-item {
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      text-align: left;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      line-height: 1.4;
+    }
+    .option-en {
+      font-size: 13px;
+      color: #888;
+      margin-top: 4px;
+    }
+    .option-item.active {
+      border-color: #d84315;
+      background: #fff3ee;
+      color: #d84315;
+    }
+    .btn-next, .btn-generate, .btn-save {
+      display: block;
+      width: 100%;
+      height: 48px;
+      line-height: 48px;
+      text-align: center;
+      background: #d84315;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 17px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    .btn-generate {
+      background: #f57c00;
+    }
+    .btn-save {
+      background: #228844;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .poster-wrap {
+      text-align: center;
+      margin-top: 20px;
+    }
+    #posterCanvas {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+      display: none;
+    }
+    #saveImg {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    }
+    .tip-text {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+    .loading-tip {
+      color: #999;
+      font-size: 15px;
+      margin:10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 答题页面 -->
+    <div class="page active" id="page1">
+      <h2 class="title">
+        海底捞·五行调味局
+        <div class="sub-en">HAIDILAO CONDIMENT IDENTITY TEST</div>
+      </h2>
+
+      <!-- 第1题 权重3分 -->
+      <div class="question-box" id="q1">
+        <p class="q-title">问题1：你调蘸料时，放得最多的基底酱料是？</p>
+        <p class="q-en">Q1: What base seasoning do you put the most in your dip?</p>
+        <button class="option-item" data-type="木" data-weight="3">
+          醋 / 柠檬汁等酸香草本类
+          <div class="option-en">Vinegar / Lemon juice & sour herbal flavors</div>
+        </button>
+        <button class="option-item" data-type="火" data-weight="3">
+          各类辣椒 / 辣椒酱等辛辣刺激类
+          <div class="option-en">Chili / Chili sauce & spicy flavors</div>
+        </button>
+        <button class="option-item" data-type="土" data-weight="3">
+          麻酱 / 花生碎 / 腐乳等甘甜醇厚类
+          <div class="option-en">Sesame paste / Peanut / Fermented bean curd</div>
+        </button>
+        <button class="option-item" data-type="金" data-weight="3">
+          蚝油 / 菌酱 / 胡椒粉等鲜辛提味类
+          <div class="option-en">Oyster sauce / Mushroom sauce / Pepper</div>
+        </button>
+        <button class="option-item" data-type="水" data-weight="3">
+          酱油 / 牛肉末 / 咸鲜基底类
+          <div class="option-en">Soy sauce / Minced beef / Fermented beans</div>
+        </button>
+      </div>
+
+      <!-- 第2题 权重2分 -->
+      <div class="question-box" id="q2" style="display: none;">
+        <p class="q-title">问题2：你吃火锅蘸料更偏爱哪种口感？</p>
+        <p class="q-en">Q2: What texture of hot pot dip do you prefer?</p>
+        <button class="option-item" data-type="木" data-weight="2">
+          清爽解腻，吃完不糊嘴
+          <div class="option-en">Refreshing, non-greasy after eating</div>
+        </button>
+        <button class="option-item" data-type="火" data-weight="2">
+          劲爽爆辣，越吃越上头
+          <div class="option-en">Spicy and addictive taste</div>
+        </button>
+        <button class="option-item" data-type="土" data-weight="2">
+          绵密香浓，温和不刺激
+          <div class="option-en">Thick, rich and mild flavor</div>
+        </button>
+        <button class="option-item" data-type="金" data-weight="2">
+          鲜味突出，搭配清汤绝佳
+          <div class="option-en">Strong umami for clear soup</div>
+        </button>
+        <button class="option-item" data-type="水" data-weight="2">
+          咸香打底，平衡所有味道
+          <div class="option-en">Salty base to balance all tastes</div>
+        </button>
+      </div>
+
+      <!-- 第3题 权重1分 -->
+      <div class="question-box" id="q3" style="display: none;">
+        <p class="q-title">问题3：你的吃蘸料习惯更贴近？</p>
+        <p class="q-en">Q3: Which dip habit fits you best?</p>
+        <button class="option-item" data-type="木" data-weight="1">
+          必加香菜、蒜泥、香葱等鲜蔬
+          <div class="option-en">Must add coriander, garlic, chives</div>
+        </button>
+        <button class="option-item" data-type="火" data-weight="1">
+          无辣不欢，多种辣椒混合
+          <div class="option-en">Love all kinds of chili mixed</div>
+        </button>
+        <button class="option-item" data-type="土" data-weight="1">
+          麻酱是灵魂，花生芝麻少不了
+          <div class="option-en">Sesame paste as core flavor</div>
+        </button>
+        <button class="option-item" data-type="金" data-weight="1">
+          喜欢鲜味儿，一定要加蚝油提鲜
+          <div class="option-en">Add oyster sauce for umami</div>
+        </button>
+        <button class="option-item" data-type="水" data-weight="1">
+          重咸口，靠酱油、肉末增加底味
+          <div class="option-en">Heavy salty taste with soy sauce</div>
+        </button>
+      </div>
+
+      <button class="btn-next" id="nextBtn">下一题 Next</button>
+    </div>
+
+    <!-- 结果海报页 -->
+    <div class="page" id="page2">
+      <h2 class="title">
+        你的五行调味人格已生成！
+        <div class="sub-en">Your Condiment Identity Result</div>
+      </h2>
+      <div class="poster-wrap">
+        <p class="loading-tip" id="loadingTip">海报生成中，请稍候...</p>
+        <canvas id="posterCanvas" width="600" height="1100"></canvas>
+        <img id="saveImg" alt="五行调味海报">
+        <p class="tip-text">长按下方图片即可保存分享 · Long press image to save</p>
+        <button class="btn-save" id="saveBtn">一键保存海报 Save Poster</button>
+        <button class="btn-generate" onclick="window.location.reload();">再测一次 Test Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 五行配置（名称严格匹配：元气捞/辣焰捞/木林捞/锋味捞/潮汐捞）
+    const personalityMap = {
+      土: {
+        char: "土",
+        fullName: "土行 · 元气捞",
+        tagCn: "温润踏实的治愈者",
+        tagEn: "Mellow & steady flavor lover",
+        gradientStart: "#d49a6a",
+        gradientEnd: "#a0522d",
+        tagColor: "#8B4513",
+        bgColor: "#fffbf0"
+      },
+      火: {
+        char: "火",
+        fullName: "火行 · 辣焰捞",
+        tagCn: "无辣不欢的灵魂",
+        tagEn: "Spicy & passionate soul",
+        gradientStart: "#e85440",
+        gradientEnd: "#d47c28",
+        tagColor: "#c42c2c",
+        bgColor: "#fff8f5"
+      },
+      木: {
+        char: "木",
+        fullName: "木行 · 木林捞",
+        tagCn: "清爽解腻极简主义",
+        tagEn: "Fresh & light taste minimalist",
+        gradientStart: "#68b984",
+        gradientEnd: "#2e7d32",
+        tagColor: "#237030",
+        bgColor: "#f3fbf5"
+      },
+      金: {
+        char: "金",
+        fullName: "金行 · 锋味捞",
+        tagCn: "追求本味的鲜食老饕",
+        tagEn: "Umami-focused food connoisseur",
+        gradientStart: "#ffc857",
+        gradientEnd: "#e68900",
+        tagColor: "#b36b00",
+        bgColor: "#fffcf0"
+      },
+      水: {
+        char: "水",
+        fullName: "水 · 潮汐捞",
+        tagCn: "包容均衡的调味大师",
+        tagEn: "Balanced & all-round flavor master",
+        gradientStart: "#63a4ff",
+        gradientEnd: "#1957a8",
+        tagColor: "#154882",
+        bgColor: "#f3f8ff"
+      }
+    };
+
+    // 同分优先级 土＞火＞木＞金＞水
+    const priorityOrder = ["土", "火", "木", "金", "水"];
+
+    let currentQ = 1;
+    let answers = [];
+    const q1 = document.getElementById('q1');
+    const q2 = document.getElementById('q2');
+    const q3 = document.getElementById('q3');
+    const nextBtn = document.getElementById('nextBtn');
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+    const canvas = document.getElementById('posterCanvas');
+    const ctx = canvas.getContext('2d');
+    const saveImg = document.getElementById('saveImg');
+    const saveBtn = document.getElementById('saveBtn');
+    const loadingTip = document.getElementById('loadingTip');
+
+    // Logo预加载，缓存防止重复请求
+    let logoReady = false;
+    const globalLogo = new Image();
+    globalLogo.crossOrigin = "anonymous";
+    globalLogo.src = "logo.png";
+    globalLogo.onload = () => { logoReady = true; };
+    globalLogo.onerror = () => { logoReady = false; };
+
+    // 一键保存按钮
+    saveBtn.addEventListener('click', function () {
+      try {
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        a.download = '五行调味海报.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (e) {
+        alert('保存失败，请长按图片保存');
+      }
+    });
+
+    // 选项点击选中
+    document.querySelectorAll('.option-item').forEach(item => {
+      item.addEventListener('click', function () {
+        const parent = this.parentElement;
+        parent.querySelectorAll('.option-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+        answers[currentQ - 1] = {
+          type: this.dataset.type,
+          weight: Number(this.dataset.weight)
+        };
+      });
+    });
+
+    // 切换题目、计算结果
+    nextBtn.addEventListener('click', function () {
+      if (!answers[currentQ - 1]) {
+        alert('请先选择一个选项 | Please choose an option');
+        return;
+      }
+      if (currentQ === 1) {
+        q1.style.display = 'none';
+        q2.style.display = 'block';
+        currentQ = 2;
+      } else if (currentQ === 2) {
+        q2.style.display = 'none';
+        q3.style.display = 'block';
+        currentQ = 3;
+        this.innerText = '生成我的人格海报 Generate Poster';
+      } else if (currentQ === 3) {
+        const scores = {土:0,火:0,木:0,金:0,水:0};
+        answers.forEach(item => scores[item.type] += item.weight);
+        let maxScore = Math.max(...Object.values(scores));
+        const equalList = priorityOrder.filter(t => scores[t] === maxScore);
+        const resType = equalList[0];
+
+        page1.classList.remove('active');
+        page2.classList.add('active');
+        loadingTip.style.display = 'block';
+
+        // 等待logo加载完成再绘图，超时强制绘图（无logo也出文字）
+        function renderPoster() {
+          drawPoster(resType);
+          setTimeout(() => {
+            saveImg.src = canvas.toDataURL('image/png');
+            loadingTip.style.display = 'none';
+          }, 150);
+        }
+        if (logoReady) {
+          renderPoster();
+        } else {
+          globalLogo.onload = renderPoster;
+          setTimeout(renderPoster, 800); // 800ms兜底，再不加载直接画
+        }
+      }
+    });
+
+    // 绘制海报（logo缺失只不画图，文字完整渲染）
+    function drawPoster(type) {
+      const info = personalityMap[type];
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = info.bgColor;
+      ctx.fillRect(0, 0, w, h);
+
+      // 仅logo加载成功才绘制
+      if (globalLogo.complete && globalLogo.naturalWidth > 0) {
+        const logoSize = 100;
+        const lx = (w - logoSize) / 2;
+        ctx.drawImage(globalLogo, lx, 30, logoSize, logoSize);
+      }
+
+      // 英文大标题
+      ctx.fillStyle = "#666";
+      ctx.font = "30px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText("HAIDILAO CONDIMENT IDENTITY", w / 2, 160);
+
+      // 主标题
+      ctx.fillStyle = "#222";
+      ctx.font = "bold 40px Microsoft Yahei";
+      ctx.fillText("海底捞·五行调味局", w / 2, 205);
+
+      // 中间渐变大圆
+      const r = 210;
+      const cx = w / 2;
+      const cy = 440;
+      const grad = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
+      grad.addColorStop(0, info.gradientStart);
+      grad.addColorStop(1, info.gradientEnd);
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // 圆内五行大字
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 160px Microsoft Yahei";
+      ctx.textBaseline = "middle";
+      ctx.fillText(info.char, cx, cy);
+
+      // 捞系名称
+      ctx.fillStyle = "#222";
+      ctx.font = "bold 52px Microsoft Yahei";
+      ctx.textBaseline = "top";
+      ctx.fillText(info.fullName, w / 2, 720);
+
+      // 中文标签
+      ctx.fillStyle = info.tagColor;
+      ctx.font = "bold 32px Microsoft Yahei";
+      ctx.fillText(info.tagCn, w / 2, 785);
+
+      // 英文小字
+      ctx.fillStyle = "#777";
+      ctx.font = "22px Microsoft Yahei";
+      ctx.fillText(info.tagEn, w / 2, 840);
+    }
+  </script>
+</body>
+</html>
